@@ -1,0 +1,14 @@
+host: ldap.example.com:389
+insecureSkipVerify: true
+startTLS: true
+bindDN: user@domain
+bindPW: password
+userSearch:
+  baseDN: DC=example,DC=com
+  filter: (objectClass=person)
+  nameAttr: sAMAccountName
+groupSearch:
+  baseDN: DC=example,DC=com
+  filter: (objectClass=group)
+  userAttr: member
+  nameAttr: name
