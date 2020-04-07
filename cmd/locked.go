@@ -1,5 +1,5 @@
 /*
-Copyright © 2020 Kamil Wokitajtis <wokitajtis@gmail.com>
+Copyright © 2020 NAME HERE <EMAIL ADDRESS>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -25,18 +25,24 @@ var lockedCmd = &cobra.Command{
 	Short: "Check if user(s) account(s) is(are) locked",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
-		if userName != "" {
+		if len(users) > 0 {
 			client := ldapClient(config)
-			result := ldapCheckUser(client, config, config.UserSearch.NameAttr, userName)
+			for _, user := range users {
+				result = append(result, ldapCheckUser(client, config, config.UserSearch.NameAttr, user)...)
+			}
 			client.Close()
-			checkResultsLocked(result)
+			if len(result) > 0 {
+				checkResultsLocked(result)
+			}
 		}
 
 		if groupName != "" {
 			client := ldapClient(config)
 			result := ldapCheckGroup(client, config, groupName)
 			client.Close()
-			checkResultsLocked(result)
+			if len(result) > 0 {
+				checkResultsLocked(result)
+			}
 		}
 	},
 }
@@ -52,5 +58,5 @@ func init() {
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
-	// lockedCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+
 }

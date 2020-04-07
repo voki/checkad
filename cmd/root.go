@@ -37,6 +37,7 @@ var userName string
 var groupName string
 var exclude string
 var result []Result
+var users []string
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -72,9 +73,10 @@ func init() {
 
 	rootCmd.PersistentFlags().BoolVarP(&verbose, "verbose", "v", false, "Enable verbose mode")
 	rootCmd.PersistentFlags().BoolVarP(&nested, "nested", "n", false, "Search nested groups also")
-	rootCmd.PersistentFlags().StringVarP(&userName, "user", "u", "", "Check single user account(s)")
+	rootCmd.PersistentFlags().StringSliceVarP(&users, "user", "u", []string{}, "Check user(s) account(s)")
 	rootCmd.PersistentFlags().StringVarP(&groupName, "group", "g", "", "Check all group members accounts")
 	rootCmd.PersistentFlags().StringVarP(&exclude, "exclude", "e", "", "Exclude OU, eg. OU=Service Accounts")
+
 }
 
 // initConfig reads in config file and ENV variables if set.

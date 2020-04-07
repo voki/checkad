@@ -27,20 +27,25 @@ var disabledCmd = &cobra.Command{
 	Long:  ``,
 	Args:  cobra.ExactArgs(0),
 	Run: func(cmd *cobra.Command, args []string) {
-		//fmt.Println(viper.GetString("config.host"))
-		//fmt.Println(viper.GetString("config.userSearch.baseDN"))
-		if userName != "" {
+
+		if len(users) > 0 {
 			client := ldapClient(config)
-			result := ldapCheckUser(client, config, config.UserSearch.NameAttr, userName)
+			for _, user := range users {
+				result = append(result, ldapCheckUser(client, config, config.UserSearch.NameAttr, user)...)
+			}
 			client.Close()
-			checkResultsDisabled(result)
+			if len(result) > 0 {
+				checkResultsDisabled(result)
+			}
 		}
 
 		if groupName != "" {
 			client := ldapClient(config)
 			result := ldapCheckGroup(client, config, groupName)
 			client.Close()
-			checkResultsDisabled(result)
+			if len(result) > 0 {
+				checkResultsDisabled(result)
+			}
 		}
 	},
 }
@@ -56,8 +61,5 @@ func init() {
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
-	//disabledCmd.Flags().StringVarP(&userName, "user", "u", "", "Check single user account")
-	//disabledCmd.Flags().StringVarP(&groupName, "group", "g", "", "Check all group members accounts")
-	//disabledCmd.Flags().StringVarP(&exclude, "exclude", "e", "", "Exclude OU, eg. OU=Service Accounts")
 
 }

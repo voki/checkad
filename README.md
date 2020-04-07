@@ -22,8 +22,9 @@ checkad [command] -h
 
 ```bash
 checkad disabled -u username
+checkad disabled -u username1,username2
 checkad expired -g GROUP-NAME -c 7 -w 14 -e "OU=Service Accounts"
-checkad locked -g GROUP-NAME -n
+checkad locked -g GROUP-NAME -n -v
 
 ```
 ## Config File

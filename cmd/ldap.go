@@ -176,7 +176,12 @@ func ldapCheckGroup(conn *ldap.Conn, c Config, groupName string) []Result {
 	groupDN = getGroupDN(conn, c, groupName)
 
 	if verbose {
-		log.Printf("--> Found group: %s\n", groupDN)
+		if groupDN != "" {
+			log.Printf("--> Found group: %s\n", groupDN)
+		} else {
+			log.Println("--> Group not found!")
+			return nil
+		}
 	}
 
 	if nested {
@@ -250,9 +255,7 @@ func getGroupDN(conn *ldap.Conn, c Config, groupName string) string {
 		log.Fatal(err)
 	}
 
-	if len(sgDN.Entries) != 1 {
-		fmt.Println("Query returned error!")
-	} else {
+	if len(sgDN.Entries) == 1 {
 		groupDN = strings.Replace(sgDN.Entries[0].DN, "\\", "", -1)
 	}
 
